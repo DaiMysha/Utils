@@ -33,7 +33,7 @@ namespace dm {
 namespace utils {
 namespace maths {
 
-	const float PI		3.14159265358979323846
+	constexpr float PI = 3.14159265358979323846;
 
     template <typename T>
     inline const T& min(const T& a, const T& b);
@@ -69,7 +69,7 @@ namespace maths {
 	struct fact;
 
 	//fast sqrt float cheat
-	inline float sqrt(float number) 
+	inline float sqrt(float number)
 	{
 		long i;
 		float x, y;
@@ -81,7 +81,7 @@ namespace maths {
 		i = 0x5f3759df - ( i >> 1 );
 		float* yp = reinterpret_cast<float*>(&i);
 		y = *yp;
-		
+
 		y = y * ( f - ( x * y * y ) );
 		y = y * ( f - ( x * y * y ) );
 		y = y * ( f - ( x * y * y ) );

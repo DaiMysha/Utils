@@ -1,4 +1,4 @@
-/** 
+/**
 BSD 2-Clause License
 
 Copyright (c) 2017, Christophe Gire
@@ -32,7 +32,7 @@ namespace dm {
 namespace utils {
 
     template <typename T>
-    class FixedSizeList 
+    class FixedSizeList
 	{
         public:
 			FixedSizeList();//no maximum size ; requires a later call to init
@@ -51,9 +51,11 @@ namespace utils {
 			void push_front(T t);
 			T begin(void) const;
 			T end(void) const;
-			T get(size_t i);
+			T& get(size_t i);
+			const T& get(size_t i) const;
 
-			T operator[](size_t i);
+			T& operator[](size_t i);
+			const T& operator[](size_t i) const;
 
         private:
 			T* _data;

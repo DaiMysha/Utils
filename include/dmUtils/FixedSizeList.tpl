@@ -87,6 +87,16 @@ namespace utils {
         return _stored==_max_size;
     }
 
+	template <typename T>
+	void FixedSizeList<T>::clear()
+	{
+		if(!isEmpty())
+		{
+			_stored = 0;
+			_first = _last = 0;
+		}
+	}
+
     template <typename T>
     T FixedSizeList<T>::pop_back(void)
 	{

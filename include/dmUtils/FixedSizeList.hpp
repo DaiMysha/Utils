@@ -45,6 +45,8 @@ namespace utils {
 			bool isEmpty(void) const;//true if the list is empty
 			bool isFull(void) const;//true if the list if full
 
+			void clear();
+
 			T pop_back(void);
 			T pop_front(void);
 			void push_back(T t);

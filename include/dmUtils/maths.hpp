@@ -29,11 +29,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef HEADER_DMUTILS_MATH
 #define HEADER_DMUTILS_MATH
 
+#ifdef min
+#undef min
+#endif
+
+#ifdef max
+#undef max
+#endif
+
 namespace dm {
 namespace utils {
 namespace maths {
 
-	constexpr float PI = 3.14159265358979323846;
+	constexpr float PI = 3.14159265358979323846f;
 
     template <typename T>
     inline const T& min(const T& a, const T& b);

@@ -38,12 +38,14 @@ namespace utils {
     class DynamicBitset
 	{
         public:
-
             bool has(size_t i) const;
             void set(size_t i);
             void reset(size_t i);
 
-            size_t countOnes() const;
+            size_t countNotEmpty() const;
+
+            void shrink_to_fit();
+            size_t size();
 
         private:
             void _resize(size_t newSize);

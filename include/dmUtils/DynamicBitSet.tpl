@@ -16,7 +16,7 @@ template <typename T>
 void DynamicBitset<T>::set(size_t i)
 {
 	size_t index = _index(i);
-	if(index >= _set.size()) _resize(index);
+	if(index >= _set.size()) _resize(index + 1);
 
 	_set[index] |= _bit(_bitIndex(i));
 }
@@ -31,7 +31,7 @@ void DynamicBitset<T>::reset(size_t i)
 }
 
 template <typename T>
-size_t DynamicBitset<T>::countOnes() const
+size_t DynamicBitset<T>::countNotEmpty() const
 {
 	size_t c = 0;
 	for(size_t i = 0; i < _set.size(); ++i)
@@ -40,6 +40,32 @@ size_t DynamicBitset<T>::countOnes() const
 	}
 	return c;
 }
+
+template <typename T>
+void DynamicBitset<T>::shrink_to_fit()
+{
+	if (size() == 0) return;
+	size_t s = size() - 1;
+
+	while (s > 0 && _set[s] == 0)
+	{
+		--s;
+	}
+
+	if (s == 0 && _set[s] == 0) _set.clear();
+	else
+	{
+		++s;
+		_set.resize(s);
+	}
+}
+
+template <typename T>
+size_t DynamicBitset<T>::size()
+{
+	return _set.size();
+}
+
 
 template <typename T>
 void DynamicBitset<T>::_resize(size_t newSize)

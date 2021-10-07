@@ -232,14 +232,15 @@ void DynamicBitset<T>::iterator::_findNext()
 
 	while (_index < _data->size() && !found)
 	{
-		do
+		++_bit;
+		t = (_data->_set[_index] >> _bit);
+		while (t != 0 && (t & 1) == 0 && _bit < _data->storageSizeBit())
 		{
 			++_bit;
 			t = (_data->_set[_index] >> _bit);
-			if (t == 0) break;
-		} while ((t & 1) == 0 && _bit < _data->storageSizeBit());
+		}
 
-		if (t & 1)
+		if (_bit < _data->storageSizeBit() && (t & 1))
 		{
 			found = true;
 		}

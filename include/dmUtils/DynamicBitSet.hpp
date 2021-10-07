@@ -38,6 +38,7 @@ namespace utils {
     class DynamicBitset
 	{
         public:
+
             bool has(size_t i) const;
             void set(size_t i);
             void reset(size_t i);
@@ -45,7 +46,11 @@ namespace utils {
             size_t countNotEmpty() const;
 
             void shrink_to_fit();
-            size_t size();
+            size_t size() const;
+
+            size_t storageSizeBit() const;
+
+            T maxValue() const;
 
         private:
             void _resize(size_t newSize);

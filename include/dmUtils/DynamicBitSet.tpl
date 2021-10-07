@@ -61,11 +61,16 @@ void DynamicBitset<T>::shrink_to_fit()
 }
 
 template <typename T>
-size_t DynamicBitset<T>::size()
+size_t DynamicBitset<T>::size() const
 {
 	return _set.size();
 }
 
+template <typename T>
+size_t DynamicBitset<T>::storageSizeBit() const
+{
+	return sizeof(T) * 8;
+}
 
 template <typename T>
 void DynamicBitset<T>::_resize(size_t newSize)
@@ -92,15 +97,21 @@ void DynamicBitset<T>::_resize(size_t newSize)
 }
 
 template <typename T>
+T DynamicBitset<T>::maxValue() const
+{
+	return size() * storageSizeBit();
+}
+
+template <typename T>
 size_t DynamicBitset<T>::_index(size_t i) const
 {
-	return i / (sizeof(T) * 8);
+	return i / (storageSizeBit());
 }
 
 template <typename T>
 size_t DynamicBitset<T>::_bitIndex(size_t i) const
 {
-	return i % (sizeof(T) * 8);
+	return i % (storageSizeBit());
 }
 
 template<typename T>

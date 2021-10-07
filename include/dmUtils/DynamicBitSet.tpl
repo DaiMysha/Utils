@@ -62,6 +62,12 @@ void DynamicBitset<T>::shrink_to_fit()
 }
 
 template <typename T>
+void DynamicBitset<T>::clear()
+{
+	_set.clear();
+}
+
+template <typename T>
 size_t DynamicBitset<T>::size() const
 {
 	return _set.size();

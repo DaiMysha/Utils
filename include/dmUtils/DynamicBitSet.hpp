@@ -73,6 +73,8 @@ namespace utils {
             size_t countNotEmpty() const;
 
             void shrink_to_fit();
+            void clear();
+
             size_t size() const;
 
             size_t storageSizeBit() const;

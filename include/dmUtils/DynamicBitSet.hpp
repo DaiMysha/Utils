@@ -38,6 +38,33 @@ namespace utils {
     class DynamicBitset
 	{
         public:
+            class iterator
+            {
+                public:
+                    using iterator_category = std::forward_iterator_tag;
+                    using difference_type = std::ptrdiff_t;
+                    using value_type = T;
+                    using pointer = T;  // or also value_type*
+                    using reference = T;  // or also value_type&
+
+                    iterator(DynamicBitset* data);
+
+                    reference operator*() const;
+                    pointer operator->();
+
+                    iterator& operator++();
+                    iterator operator++(int);
+
+                    bool operator==(const iterator& b);
+                    bool operator!=(const iterator& b);
+
+                private:
+                    void _findNext();
+
+                    DynamicBitset* _data;
+                    size_t _index;
+                    char _bit;
+            };
 
             bool has(size_t i) const;
             void set(size_t i);
@@ -51,6 +78,9 @@ namespace utils {
             size_t storageSizeBit() const;
 
             T maxValue() const;
+
+            iterator begin();
+            iterator end();
 
         private:
             void _resize(size_t newSize);

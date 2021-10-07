@@ -66,6 +66,8 @@ namespace utils {
                     char _bit;
             };
 
+            DynamicBitset();
+
             bool has(size_t i) const;
             void set(size_t i);
             void reset(size_t i);
@@ -75,7 +77,11 @@ namespace utils {
             void shrink_to_fit();
             void clear();
 
+            //size returns the amount of T needed to store everything
             size_t size() const;
+
+            //count returns the number of 1s stored
+            size_t count() const;
 
             size_t storageSizeBit() const;
 
@@ -91,6 +97,7 @@ namespace utils {
             size_t _bitIndex(size_t i) const;
             T _bit(size_t bitIndex) const;
             std::vector<T> _set;
+            size_t _counter; //counts the number of 1s
     };
 
     typedef DynamicBitset<std::uint32_t> DynamicBitset32;

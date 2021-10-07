@@ -6,6 +6,11 @@ namespace dm {
 namespace utils {
 
 template <typename T>
+DynamicBitset<T>::DynamicBitset() : _counter(0)
+{
+}
+
+template <typename T>
 bool DynamicBitset<T>::has(size_t i) const
 {
 	size_t index = _index(i);
@@ -20,6 +25,7 @@ void DynamicBitset<T>::set(size_t i)
 	if(index >= _set.size()) _resize(index + 1);
 
 	_set[index] |= _bit(_bitIndex(i));
+	++_counter;
 }
 
 template <typename T>
@@ -29,6 +35,7 @@ void DynamicBitset<T>::reset(size_t i)
 	if(index >= _set.size()) return;
 
 	_set[index] &= (~_bit(_bitIndex(i)));
+	--_counter;
 }
 
 template <typename T>
@@ -58,6 +65,12 @@ void DynamicBitset<T>::shrink_to_fit()
 	{
 		++s;
 		_set.resize(s);
+
+		//recount the 1s
+		for (size_t i : *this)
+		{
+			++_counter;
+		}
 	}
 }
 
@@ -65,12 +78,19 @@ template <typename T>
 void DynamicBitset<T>::clear()
 {
 	_set.clear();
+	_counter = 0;
 }
 
 template <typename T>
 size_t DynamicBitset<T>::size() const
 {
 	return _set.size();
+}
+
+template <typename T>
+size_t DynamicBitset<T>::count() const
+{
+	return _counter;
 }
 
 template <typename T>

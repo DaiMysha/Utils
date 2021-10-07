@@ -24,8 +24,8 @@ void DynamicBitset<T>::set(size_t i)
 	size_t index = _index(i);
 	if(index >= _set.size()) _resize(index + 1);
 
+	if(!has(i)) ++_counter;
 	_set[index] |= _bit(_bitIndex(i));
-	++_counter;
 }
 
 template <typename T>
@@ -34,8 +34,8 @@ void DynamicBitset<T>::reset(size_t i)
 	size_t index = _index(i);
 	if(index >= _set.size()) return;
 
+	if(has(i)) --_counter;
 	_set[index] &= (~_bit(_bitIndex(i)));
-	--_counter;
 }
 
 template <typename T>

@@ -1,7 +1,4 @@
 
-#include <iostream>
-#include <iomanip>
-
 namespace dm {
 namespace utils {
 
@@ -142,6 +139,20 @@ typename DynamicBitset<T>::iterator DynamicBitset<T>::end()
 }
 
 template <typename T>
+typename DynamicBitset<T>::const_iterator DynamicBitset<T>::begin() const
+{
+	return const_iterator(this);
+}
+
+template <typename T>
+typename DynamicBitset<T>::const_iterator DynamicBitset<T>::end() const
+{
+	return const_iterator(nullptr);
+}
+
+/// ///////////// private
+
+template <typename T>
 size_t DynamicBitset<T>::_index(size_t i) const
 {
 	return i / (storageSizeBit());
@@ -205,13 +216,13 @@ typename DynamicBitset<T>::iterator DynamicBitset<T>::iterator::operator++(int)
 }
 
 template<typename T>
-bool DynamicBitset<T>::iterator::operator==(const DynamicBitset<T>::iterator& b)
+bool DynamicBitset<T>::iterator::operator==(const DynamicBitset<T>::iterator& b) const
 {
 	return _data == b._data && _index == b._index && _bit == b._bit;
 }
 
 template<typename T>
-bool DynamicBitset<T>::iterator::operator!=(const DynamicBitset<T>::iterator& b)
+bool DynamicBitset<T>::iterator::operator!=(const DynamicBitset<T>::iterator& b) const
 {
 	return _data != b._data || _index != b._index || _bit != b._bit;
 }
@@ -234,13 +245,115 @@ void DynamicBitset<T>::iterator::_findNext()
 	{
 		++_bit;
 		t = (_data->_set[_index] >> _bit);
-		while (t != 0 && (t & 1) == 0 && _bit < _data->storageSizeBit())
+		while (t != 0 && (t & 1) == 0 && _bit < (int)_data->storageSizeBit())
 		{
 			++_bit;
 			t = (_data->_set[_index] >> _bit);
 		}
 
-		if (_bit < _data->storageSizeBit() && (t & 1))
+		if (_bit < (int)_data->storageSizeBit() && (t & 1))
+		{
+			found = true;
+		}
+		else
+		{
+			++_index;
+			_bit = -1;
+		}
+	}
+
+	if (!found)
+	{
+		//no more left
+		_index = static_cast<size_t>(-1);
+		_bit = -1;
+		_data = nullptr;
+	}
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+////////////////////////////////// const_iterator //////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+template<typename T>
+DynamicBitset<T>::const_iterator::const_iterator(const DynamicBitset* data)
+{
+	_data = data;
+	_index = 0;
+	_bit = -1;
+
+	_findNext();
+}
+
+
+template<typename T>
+typename DynamicBitset<T>::const_iterator::reference DynamicBitset<T>::const_iterator::operator*() const
+{
+	return _bit + (_index * _data->storageSizeBit());
+}
+
+template<typename T>
+typename DynamicBitset<T>::const_iterator::pointer DynamicBitset<T>::const_iterator::operator->()
+{
+	return *this;
+}
+
+template<typename T>
+typename DynamicBitset<T>::const_iterator& DynamicBitset<T>::const_iterator::operator++()
+{
+	_findNext();
+
+	return *this;
+}
+
+template<typename T>
+typename DynamicBitset<T>::const_iterator DynamicBitset<T>::const_iterator::operator++(int)
+{
+	const_iterator tmp = *this;
+
+	_findNext();
+
+	return tmp;
+}
+
+template<typename T>
+bool DynamicBitset<T>::const_iterator::operator==(const DynamicBitset<T>::const_iterator& b) const
+{
+	return _data == b._data && _index == b._index && _bit == b._bit;
+}
+
+template<typename T>
+bool DynamicBitset<T>::const_iterator::operator!=(const DynamicBitset<T>::const_iterator& b) const
+{
+	return _data != b._data || _index != b._index || _bit != b._bit;
+}
+
+template<typename T>
+void DynamicBitset<T>::const_iterator::_findNext()
+{
+	if (!_data || _data->size() == 0 || _data->countNotEmpty() == 0)
+	{
+		_index = static_cast<size_t>(-1);
+		_bit = -1;
+		_data = nullptr;
+		return;
+	}
+
+	bool found = false;
+	T t;
+
+	while (_index < _data->size() && !found)
+	{
+		++_bit;
+		t = (_data->_set[_index] >> _bit);
+		while (t != 0 && (t & 1) == 0 && _bit < (int)_data->storageSizeBit())
+		{
+			++_bit;
+			t = (_data->_set[_index] >> _bit);
+		}
+
+		if (_bit < (int)_data->storageSizeBit() && (t & 1))
 		{
 			found = true;
 		}

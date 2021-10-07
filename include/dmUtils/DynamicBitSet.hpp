@@ -55,13 +55,41 @@ namespace utils {
                     iterator& operator++();
                     iterator operator++(int);
 
-                    bool operator==(const iterator& b);
-                    bool operator!=(const iterator& b);
+                    bool operator==(const iterator& b) const;
+                    bool operator!=(const iterator& b) const;
 
                 private:
                     void _findNext();
 
                     DynamicBitset* _data;
+                    size_t _index;
+                    char _bit;
+            };
+
+            class const_iterator
+            {
+                public:
+                    using iterator_category = std::forward_iterator_tag;
+                    using difference_type = std::ptrdiff_t;
+                    using value_type = T;
+                    using pointer = T;  // or also value_type*
+                    using reference = T;  // or also value_type&
+
+                    const_iterator(const DynamicBitset* data);
+
+                    reference operator*() const;
+                    pointer operator->();
+
+                    const_iterator& operator++();
+                    const_iterator operator++(int);
+
+                    bool operator==(const const_iterator& b) const;
+                    bool operator!=(const const_iterator& b) const;
+
+                private:
+                    void _findNext();
+
+                    const DynamicBitset* _data;
                     size_t _index;
                     char _bit;
             };
@@ -89,6 +117,9 @@ namespace utils {
 
             iterator begin();
             iterator end();
+
+            const_iterator begin() const;
+            const_iterator end() const;
 
         private:
             void _resize(size_t newSize);

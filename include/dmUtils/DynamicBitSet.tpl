@@ -3,8 +3,22 @@ namespace dm {
 namespace utils {
 
 template <typename T>
-DynamicBitset<T>::DynamicBitset() : _counter(0)
+DynamicBitset<T>::DynamicBitset() : DynamicBitset(0)
 {
+}
+
+template <typename T>
+DynamicBitset<T>::DynamicBitset(size_t initialCount) : _counter(0)
+{
+	if (initialCount)
+	{
+		_resize(static_cast<size_t>(std::ceil(static_cast<double>(initialCount) / static_cast<double>(storageSizeBit()))));
+	}
+	_maxedOutIndividualStorageValue = 0;
+	for (size_t b = 0; b < storageSizeBit(); ++b)
+	{
+		_maxedOutIndividualStorageValue |= (1 << b);
+	}
 }
 
 template <typename T>
@@ -33,6 +47,26 @@ void DynamicBitset<T>::reset(size_t i)
 
 	if(has(i)) --_counter;
 	_set[index] &= (~_bit(_bitIndex(i)));
+}
+
+template <typename T>
+bool DynamicBitset<T>::hasSetValues() const
+{
+	for (size_t i = 0; i < _set.size(); ++i)
+	{
+		if (_set[i] != 0) return true;
+	}
+	return false;
+}
+
+template <typename T>
+bool DynamicBitset<T>::hasUnsetValues() const
+{
+	for (size_t i = 0; i < _set.size(); ++i)
+	{
+		if (_set[i] != _maxedOutIndividualStorageValue) return true;
+	}
+	return false;
 }
 
 template <typename T>
@@ -85,9 +119,21 @@ size_t DynamicBitset<T>::size() const
 }
 
 template <typename T>
+size_t DynamicBitset<T>::capacity() const
+{
+	return size() * storageSizeBit();
+}
+
+template <typename T>
 size_t DynamicBitset<T>::count() const
 {
 	return _counter;
+}
+
+template <typename T>
+size_t DynamicBitset<T>::countUnset() const
+{
+	return capacity() - count();
 }
 
 template <typename T>
@@ -95,6 +141,10 @@ size_t DynamicBitset<T>::storageSizeBit() const
 {
 	return sizeof(T) * 8;
 }
+
+///////////////////////////////////////////////////////////////
+////////////////////////// PROTECTED //////////////////////////
+///////////////////////////////////////////////////////////////
 
 template <typename T>
 void DynamicBitset<T>::_resize(size_t newSize)
@@ -123,7 +173,7 @@ void DynamicBitset<T>::_resize(size_t newSize)
 template <typename T>
 T DynamicBitset<T>::maxValue() const
 {
-	return size() * storageSizeBit();
+	return _maxedOutIndividualStorageValue;
 }
 
 template <typename T>

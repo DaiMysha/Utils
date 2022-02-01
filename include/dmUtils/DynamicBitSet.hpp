@@ -95,10 +95,14 @@ namespace utils {
             };
 
             DynamicBitset();
+            DynamicBitset(size_t initialCount);
 
             bool has(size_t i) const;
             void set(size_t i);
             void reset(size_t i);
+
+            bool hasSetValues() const;
+            bool hasUnsetValues() const;
 
             size_t countNotEmpty() const;
 
@@ -106,13 +110,18 @@ namespace utils {
             void clear();
 
             //size returns the amount of T needed to store everything
+            //return _set.size()
             size_t size() const;
+            //capcity returns the number of 1s that can be stored
+            size_t capacity() const;
 
             //count returns the number of 1s stored
             size_t count() const;
+            size_t countUnset() const;
 
             size_t storageSizeBit() const;
 
+            //return the maximum individual value of a single set element
             T maxValue() const;
 
             iterator begin();
@@ -129,6 +138,8 @@ namespace utils {
             T _bit(size_t bitIndex) const;
             std::vector<T> _set;
             size_t _counter; //counts the number of 1s
+
+            T _maxedOutIndividualStorageValue;
     };
 
     typedef DynamicBitset<std::uint32_t> DynamicBitset32;

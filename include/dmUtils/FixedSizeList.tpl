@@ -34,10 +34,8 @@ namespace dm {
 namespace utils {
 
 	template <typename T>
-    FixedSizeList<T>::FixedSizeList()
+    FixedSizeList<T>::FixedSizeList() : _data(nullptr), _first(0), _last(0), _capacity(0), _stored(0)
 	{
-        _data=nullptr;
-        init(0);
     }
 
     template <typename T>
@@ -49,42 +47,54 @@ namespace utils {
     template <typename T>
     FixedSizeList<T>::~FixedSizeList()
 	{
-        delete[]_data;
+        delete[] _data;
     }
 
     template <typename T>
-    void FixedSizeList<T>::init(size_t size)
+    void FixedSizeList<T>::resize(size_t size)
 	{
-        if(size)
-			_data = new T[size];
-        else _data = 0;
+        if (_data)
+        {
+            delete[] _data;
+            _data = nullptr;
+        }
+
+        if (size)
+        {
+            _data = new T[size];
+        }
+        else
+        {
+            _data = nullptr;
+        }
+
         _first = _last = 0;
-        _max_size = size;
+        _capacity = size;
         _stored = 0;
     }
 
     template <typename T>
-    size_t FixedSizeList<T>::size(void) const
+    size_t FixedSizeList<T>::size() const
 	{
         return _stored;
     }
 
     template <typename T>
-    size_t FixedSizeList<T>::max_size(void) const
+    size_t FixedSizeList<T>::capacity() const
 	{
-        return _max_size;
+        return _capacity;
     }
 
     template <typename T>
-    bool FixedSizeList<T>::isEmpty(void) const
+    bool FixedSizeList<T>::isEmpty() const
 	{
-        return _stored==0;
+        return _stored == 0;
     }
 
     template <typename T>
-    bool FixedSizeList<T>::isFull(void) const
+    bool FixedSizeList<T>::isFull() const
 	{
-        return _stored==_max_size;
+        return _capacity != 0 && _stored == _capacity;
     }
 
 	template <typename T>
@@ -98,27 +108,45 @@ namespace utils {
 	}
 
     template <typename T>
-    T FixedSizeList<T>::pop_back(void)
+    T FixedSizeList<T>::pop_back()
 	{
-        assert(!isEmpty());
-        T tmp=_data[_last];
-        if(_last==0)
-			_last=_max_size-1;
-        else --_last;
-        if(_stored>0)
-			--_stored;
+        if (isEmpty()) throw std::logic_error(__FUNCTION__);
+
+        T tmp = get(_last);
+
+        if (_last == 0)
+        {
+            _last = _capacity - 1;
+        }
+        else
+        {
+            --_last;
+        }
+
+        if (_stored > 0)
+        {
+            --_stored;
+        }
         return tmp;
     }
 
     template <typename T>
-    T FixedSizeList<T>::pop_front(void)
+    T FixedSizeList<T>::pop_front()
 	{
-        assert(!isEmpty());
-        T tmp = _data[_first++];
-        if(_first==_max_size)
-			_first=0;
-        if(_stored>0)
-			--_stored;
+        if (isEmpty()) throw std::logic_error(__FUNCTION__);
+
+        T tmp = get(_first++);
+
+        if (_first == _capacity)
+        {
+            _first = 0;
+        }
+
+        if (_stored > 0)
+        {
+            --_stored;
+        }
+
         return tmp;
     }
 
@@ -128,20 +156,26 @@ namespace utils {
         if(isEmpty())
 		{
             _first = _last = 0;
-            _data[_first]=t;
-            _stored=1;
+            _data[_first] = t;
+            _stored = 1;
             return;
         }
 		else if(isFull())
 		{
-            if(++_first==_max_size)
-				_first=0;
+            if (++_first == _capacity)
+            {
+                _first = 0;
+            }
         }
-        if(++_last==_max_size)
-			_last=0;
-        _data[_last]=t;
-        if(_stored<_max_size)
-			++_stored;
+        if (++_last == _capacity)
+        {
+            _last = 0;
+        }
+        _data[_last] = t;
+        if (_stored < _capacity)
+        {
+            ++_stored;
+        }
     }
 
     template <typename T>
@@ -150,55 +184,86 @@ namespace utils {
         if(isEmpty())
 		{
             _first = _last = 0;
-            _data[_first]=t;
-            _stored=1;
+            _data[_first] = t;
+            _stored = 1;
             return;
         }
 		else if(isFull())
 		{
-            if(_last==0)
-				_last=_max_size-1;
+            if (_last == 0)
+            {
+                _last = _capacity - 1;
+            }
         }
-        if(_first==0)
-			_first=_max_size-1;
+        if (_first == 0)
+        {
+            _first = _capacity - 1;
+        }
         else
-			--_first;
+        {
+            --_first;
+        }
         _data[_first]=t;
-        if(_stored<_max_size)
-			++_stored;
+
+        if (_stored < _capacity)
+        {
+            ++_stored;
+        }
     }
 
     template <typename T>
-    T FixedSizeList<T>::begin(void) const
+    T FixedSizeList<T>::begin() const
 	{
-        assert(!isEmpty());
+        if (isEmpty()) throw std::logic_error(__FUNCTION__);
         return _data[_first];
     }
 
     template <typename T>
-    T FixedSizeList<T>::end(void) const
+    T FixedSizeList<T>::end() const
 	{
-        assert(!isEmpty());
+        if (isEmpty()) throw std::logic_error(__FUNCTION__);
         return _data[_last];
     }
 
     template <typename T>
     T& FixedSizeList<T>::get(size_t i)
 	{
-        assert(i>=0&&i<_max_size);
-        assert(!isEmpty());
+        if (i < 0 || i >= size())
+        {
+            throw std::out_of_range(__FUNCTION__);
+        }
+
+        if (isEmpty())
+        {
+            throw std::logic_error(__FUNCTION__);
+        }
+
         size_t pos = _first+i;
-        while(pos>=_max_size) pos-=_max_size;
+        while (pos >= _capacity)
+        {
+            pos -= _capacity;
+        }
         return _data[pos];
     }
 
     template <typename T>
     const T& FixedSizeList<T>::get(size_t i) const
 	{
-        assert(i>=0&&i<_max_size);
-        assert(!isEmpty());
-        size_t pos = _first+i;
-        while(pos>=_max_size) pos-=_max_size;
+        if (i < 0 || i >= size())
+        {
+            throw std::out_of_range(__FUNCTION__);
+        }
+
+        if (isEmpty())
+        {
+            throw std::logic_error(__FUNCTION__);
+        }
+
+        size_t pos = _first + i;
+        while (pos >= _capacity)
+        {
+            pos -= _capacity;
+        }
         return _data[pos];
     }
 

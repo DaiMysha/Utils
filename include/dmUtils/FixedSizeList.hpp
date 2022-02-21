@@ -38,21 +38,25 @@ namespace utils {
 			FixedSizeList();//no maximum size ; requires a later call to init
 			FixedSizeList(size_t size);//specifies maximum size
 			~FixedSizeList();
-			void init(size_t size);//inits the list (supposes list hasn't been used before)
 
-			size_t size(void) const;//returns current list's size
-			size_t max_size(void) const;//return the maximum number of T the list can hold
-			bool isEmpty(void) const;//true if the list is empty
-			bool isFull(void) const;//true if the list if full
+			FixedSizeList(const FixedSizeList& other) = delete;
+			FixedSizeList(const FixedSizeList&& other) = delete;
+
+			void resize(size_t size);//inits the list (supposes list hasn't been used before)
+
+			size_t size() const;//returns current list's size
+			size_t capacity() const;//return the maximum number of T the list can hold
+			bool isEmpty() const;//true if the list is empty
+			bool isFull() const;//true if the list if full
 
 			void clear();
 
-			T pop_back(void);
-			T pop_front(void);
+			T pop_back();
+			T pop_front();
 			void push_back(T t);
 			void push_front(T t);
-			T begin(void) const;
-			T end(void) const;
+			T begin() const;
+			T end() const;
 			T& get(size_t i);
 			const T& get(size_t i) const;
 
@@ -62,7 +66,7 @@ namespace utils {
         private:
 			T* _data;
 			size_t _first, _last;//respectively indice of the beginning and of the end of the list, except when _stored=0
-			size_t _max_size;
+			size_t _capacity;
 			size_t _stored;//size stored
     };
 }

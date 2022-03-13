@@ -5,7 +5,8 @@
 
 int main(int, char**)
 {
-    fixedSizeListUnitTest();
+    //fixedSizeListUnitTest();
     dynamicBitSetUnitTest();
+    ressourcevectorTest();
     return 0;
 }

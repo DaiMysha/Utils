@@ -85,6 +85,7 @@ list(APPEND LIBS
 set(FILES_HEADER
 	include/dmUtils/DynamicBitSet.hpp
 	include/dmUtils/FixedSizeList.hpp
+	include/dmUtils/RessourceVector.hpp
 	include/dmUtils/maths.hpp
 	
 	unittest/test_utils.hpp
@@ -96,6 +97,7 @@ set(FILES_SRC
 	unittest/test_utils.cpp
 	unittest/test_fixedSizeList.cpp
 	unittest/test_dynamicBitSet.cpp
+	unittest/test_ressourcevector.cpp
 )
 
 add_executable(${PROJECT_NAME} ${FILES_HEADER} ${FILES_SRC})

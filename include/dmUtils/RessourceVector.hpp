@@ -71,6 +71,8 @@ class RessourceVector
 
         RessourceIndex add(const T& t);
 
+        bool isLoaded(RessourceIndex index) const;
+
         /** Size functions:
         * Size returns the amount of elements that are already set
         * Capacity returns the max amount of elements that can be stored
@@ -84,6 +86,7 @@ class RessourceVector
     protected:
         std::vector<T> _data;
         std::list<RessourceIndex> _freeSpaces;
+        std::vector<bool> _isLoaded;
 };
 
 }

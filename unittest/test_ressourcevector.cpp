@@ -22,13 +22,7 @@ void ressourcevectorTest()
     test("Size = 1", data.size() == 1);
     test("Capacity = 1", data.capacity() == 1);
     test("FreeCount = 0", data.freeCount() == 0);
-    std::cout << std::endl;
-
-    std::cout << "--- Remove ---" << std::endl;
-    data.remove(0);
-    test("Size = 0", data.size() == 0);
-    test("Capacity = 1", data.capacity() == 1);
-    test("FreeCount = 1", data.freeCount() == 1);
+    test("Loaded(0) = true", data.isLoaded(0) == true);
     std::cout << std::endl;
 
     std::cout << "--- Clear ---" << std::endl;
@@ -38,13 +32,37 @@ void ressourcevectorTest()
     test("FreeCount = 0", data.freeCount() == 0);
     std::cout << std::endl;
 
+    std::cout << "--- Remove ---" << std::endl;
+    data.clear();
+    data.add(1);
+    data.remove(0);
+    test("Size = 0", data.size() == 0);
+    test("Capacity = 1", data.capacity() == 1);
+    test("FreeCount = 1", data.freeCount() == 1);
+    std::cout << std::endl;
+
     std::cout << "--- Add ---" << std::endl;
+    data.clear();
     data.add(1);
     test("Size = 1", data.size() == 1);
     test("Capacity = 1", data.capacity() == 1);
     test("FreeCount = 0", data.freeCount() == 0);
     test("get(0) = 1", data.get(0) == 1);
     test("[0] = 1", data[0] == 1);
+    test("Loaded(0) = true", data.isLoaded(0) == true);
+    std::cout << std::endl;
+
+    std::cout << "--- Add, remove ---" << std::endl;
+    data.clear();
+    data.add(1);
+    data.add(2);
+    data.remove(0);
+    test("Size = 1", data.size() == 1);
+    test("Capacity = 1", data.capacity() == 2);
+    test("FreeCount = 0", data.freeCount() == 1);
+    test("get(1) = 2", data[1] == 2);
+    test("Loaded(0) = false", data.isLoaded(0) == false);
+    test("Loaded(1) = true", data.isLoaded(1) == true);
     std::cout << std::endl;
 
     std::cout << "--- Add, remove, readd ---" << std::endl;
@@ -56,6 +74,7 @@ void ressourcevectorTest()
     test("Capacity = 1", data.capacity() == 1);
     test("FreeCount = 0", data.freeCount() == 0);
     test("get(0) = 2", data[0] == 2);
+    test("Loaded(0) = true", data.isLoaded(0) == true);
     std::cout << std::endl;
 
 

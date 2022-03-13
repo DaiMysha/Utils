@@ -30,6 +30,7 @@ void RessourceVector<T>::clear()
 {
     _data.clear();
     _freeSpaces.clear();
+    _isLoaded.clear();
 }
 
 template<typename T>
@@ -73,11 +74,13 @@ const dm::utils::RessourceIndex RessourceVector<T>::create()
     {
         id = capacity();
         _data.push_back(T());
+        _isLoaded.push_back(true);
     }
     else
     {
         id = _freeSpaces.front();
-        _freeSpaces.erase(_freeSpaces.begin());;
+        _freeSpaces.erase(_freeSpaces.begin());
+        _isLoaded[id] = true;
     }
 
     return id;
@@ -89,6 +92,7 @@ void RessourceVector<T>::remove(dm::utils::RessourceIndex i)
     if(i >= capacity()) return;
 
     _freeSpaces.emplace_back(i);
+    _isLoaded[i] = false;
 }
 
 template<typename T>
@@ -97,6 +101,13 @@ dm::utils::RessourceIndex RessourceVector<T>::add(const T& t)
     RessourceIndex i = create();
     get(i) = t;
     return i;
+}
+
+template<typename T>
+bool RessourceVector<T>::isLoaded(dm::utils::RessourceIndex index) const
+{
+    if (index >= capacity()) return false;
+    return _isLoaded[index];
 }
 
 template<typename T>

@@ -36,7 +36,7 @@ void RessourceVector<T>::clear()
 template<typename T>
 T& RessourceVector<T>::get(dm::utils::RessourceIndex i)
 {
-    if(i >= capacity())
+    if(i >= size())
     {
         throw std::out_of_range(__FUNCTION__);
     }
@@ -46,7 +46,7 @@ T& RessourceVector<T>::get(dm::utils::RessourceIndex i)
 template<typename T>
 const T& RessourceVector<T>::get(dm::utils::RessourceIndex i) const
 {
-    if(i >= capacity())
+    if(i >= size())
     {
         throw std::out_of_range(__FUNCTION__);
     }
@@ -72,7 +72,7 @@ const dm::utils::RessourceIndex RessourceVector<T>::create()
 
     if(freeCount() == 0)
     {
-        id = capacity();
+        id = size();
         _data.push_back(T());
         _isLoaded.push_back(true);
     }
@@ -89,7 +89,7 @@ const dm::utils::RessourceIndex RessourceVector<T>::create()
 template<typename T>
 void RessourceVector<T>::remove(dm::utils::RessourceIndex i)
 {
-    if(i >= capacity()) return;
+    if(i >= size()) return;
 
     _freeSpaces.emplace_back(i);
     _isLoaded[i] = false;
@@ -106,18 +106,18 @@ dm::utils::RessourceIndex RessourceVector<T>::add(const T& t)
 template<typename T>
 bool RessourceVector<T>::isLoaded(dm::utils::RessourceIndex index) const
 {
-    if (index >= capacity()) return false;
+    if (index >= size()) return false;
     return _isLoaded[index];
 }
 
 template<typename T>
-size_t RessourceVector<T>::size() const
+size_t RessourceVector<T>::count() const
 {
-    return capacity() - freeCount();
+    return size() - freeCount();
 }
 
 template<typename T>
-size_t RessourceVector<T>::capacity() const
+size_t RessourceVector<T>::size() const
 {
     return _data.size();
 }

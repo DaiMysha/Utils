@@ -74,13 +74,13 @@ class RessourceVector
         bool isLoaded(RessourceIndex index) const;
 
         /** Size functions:
-        * Size returns the amount of elements that are already set
-        * Capacity returns the max amount of elements that can be stored
+        * count returns the amount of elements that are already set
+        * size returns the max amount of elements that can be stored
         * FreeCount returns the amount of elements that have NOT been set
         * size = capacity - freecount
         * */
+        size_t count() const;
         size_t size() const;
-        size_t capacity() const;
         size_t freeCount() const;
 
     protected:

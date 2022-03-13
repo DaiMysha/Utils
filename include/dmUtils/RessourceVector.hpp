@@ -69,7 +69,7 @@ class RessourceVector
         const RessourceIndex create();
         void remove(RessourceIndex i);
 
-        void add(const T& t);
+        RessourceIndex add(const T& t);
 
         /** Size functions:
         * Size returns the amount of elements that are already set

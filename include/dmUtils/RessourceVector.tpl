@@ -92,10 +92,11 @@ void RessourceVector<T>::remove(dm::utils::RessourceIndex i)
 }
 
 template<typename T>
-void RessourceVector<T>::add(const T& t)
+dm::utils::RessourceIndex RessourceVector<T>::add(const T& t)
 {
     RessourceIndex i = create();
     get(i) = t;
+    return i;
 }
 
 template<typename T>

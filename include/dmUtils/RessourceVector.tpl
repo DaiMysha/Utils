@@ -128,6 +128,25 @@ size_t RessourceVector<T>::freeCount() const
     return _freeSpaces.size();
 }
 
+template<typename T>
+void RessourceVector<T>::resize(size_t newsize)
+{
+    if (newsize < size()) return;
+
+    for (size_t i = size(); i < newsize; ++i)
+    {
+        _freeSpaces.push_back(i);
+    }
+    _data.resize(newsize);
+}
+
+template<typename T>
+void RessourceVector<T>::reserve(size_t newsize)
+{
+    if (newsize < size()) return;
+
+    _data.reserve(newsize);
+}
 
 }
 }

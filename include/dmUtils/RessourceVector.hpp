@@ -83,6 +83,9 @@ class RessourceVector
         size_t size() const;
         size_t freeCount() const;
 
+        void resize(size_t newsize);
+        void reserve(size_t newsize);
+
     protected:
         std::vector<T> _data;
         std::list<RessourceIndex> _freeSpaces;

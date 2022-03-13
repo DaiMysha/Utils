@@ -116,28 +116,6 @@ size_t RessourceVector<T>::freeCount() const
     return _freeSpaces.size();
 }
 
-template<typename T>
-void RessourceVector<T>::shrinkToFit()
-{
-    _data.shrink_to_fit();
-    //remove the free spaces that are above new size
-    if (_freeSpaces.size())
-    {
-        std::list<RessourceIndex>::iterator it = _freeSpaces.begin();
-        while (it != _freeSpaces.end())
-        {
-            if (*it >= capacity())
-            {
-                _freeSpaces.erase(it);
-            }
-            else
-            {
-                ++it;
-            }
-        }
-    }
-}
-
 
 }
 }

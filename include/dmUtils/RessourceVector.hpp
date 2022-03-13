@@ -81,8 +81,6 @@ class RessourceVector
         size_t capacity() const;
         size_t freeCount() const;
 
-        void shrinkToFit();
-
     protected:
         std::vector<T> _data;
         std::list<RessourceIndex> _freeSpaces;

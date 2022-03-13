@@ -15,6 +15,9 @@ void test(const std::string& msg, T value, T expected)
     else
     {
         std::cout << "/!\\ FAIL /!\\";
+        std::cout << "\n--- Expected " << expected
+            << "\n--- Got " << value
+            << std::endl;
     }
     std::cout << std::endl;
 }

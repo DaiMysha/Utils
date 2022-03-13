@@ -81,13 +81,8 @@ void ressourcevectorTest()
     data.clear();
     data.resize(10);
     test<int>("Size = 10", data.size(), 10);
-    test<int>("count = 0", data.count(), 0);
-    test<int>("FreeCount = 10", data.freeCount(), 10);
-    std::cout << "--- Add after resize ---" << std::endl;
-    data.add(1);
-    test<int>("Size = 10", data.size(), 10);
-    test<int>("count = 1", data.count(), 1);
-    test<int>("FreeCount = 9", data.freeCount(), 9);
+    test<int>("count = 0", data.count(), 10);
+    test<int>("FreeCount = 10", data.freeCount(), 0);
     std::cout << std::endl;
 
     std::cout << "--- Reserve ---" << std::endl;

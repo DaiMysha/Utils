@@ -135,9 +135,8 @@ void RessourceVector<T>::resize(size_t newsize)
 
     for (size_t i = size(); i < newsize; ++i)
     {
-        _freeSpaces.push_back(i);
+        create();
     }
-    _data.resize(newsize);
 }
 
 template<typename T>

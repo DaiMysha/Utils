@@ -42,7 +42,7 @@ namespace utils {
 			FixedSizeList(const FixedSizeList& other) = delete;
 			FixedSizeList(const FixedSizeList&& other) = delete;
 
-			void resize(size_t size);//inits the list (supposes list hasn't been used before)
+			void init(size_t size);//inits the list (supposes list hasn't been used before)
 
 			size_t size() const;//returns current list's size
 			size_t capacity() const;//return the maximum number of T the list can hold

@@ -91,6 +91,7 @@ void RessourceVector<T>::remove(dm::utils::RessourceIndex i)
 {
     if(i >= size()) return;
 
+    _data[i] = T();
     _freeSpaces.emplace_back(i);
     _isLoaded[i] = false;
 }

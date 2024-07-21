@@ -51,7 +51,7 @@ namespace utils {
     }
 
     template <typename T>
-    void FixedSizeList<T>::resize(size_t size)
+    void FixedSizeList<T>::init(size_t size)
 	{
         if (_data)
         {

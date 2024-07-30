@@ -69,7 +69,7 @@ class RessourceVector
         const RessourceIndex create();
         void remove(RessourceIndex i);
 
-        RessourceIndex add(const T& t);
+        RessourceIndex add(const std::shared_ptr<T>& ptr);
 
         bool isLoaded(RessourceIndex index) const;
 
@@ -87,7 +87,7 @@ class RessourceVector
         void reserve(size_t newsize);
 
     protected:
-        std::vector<T> _data;
+        std::vector<std::shared_ptr<T>> _data;
         std::list<RessourceIndex> _freeSpaces;
         std::vector<bool> _isLoaded;
 };

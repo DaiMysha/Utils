@@ -40,7 +40,7 @@ T& RessourceVector<T>::get(dm::utils::RessourceIndex i)
     {
         throw std::out_of_range(__FUNCTION__);
     }
-    return _data[i];
+    return *_data[i];
 }
 
 template<typename T>
@@ -50,7 +50,7 @@ const T& RessourceVector<T>::get(dm::utils::RessourceIndex i) const
     {
         throw std::out_of_range(__FUNCTION__);
     }
-    return _data[i];
+    return *_data[i];
 }
 
 template<typename T>
@@ -73,7 +73,7 @@ const dm::utils::RessourceIndex RessourceVector<T>::create()
     if(freeCount() == 0)
     {
         id = size();
-        _data.push_back(T());
+        _data.push_back(std::make_shared<T>());
         _isLoaded.push_back(true);
     }
     else
@@ -81,6 +81,7 @@ const dm::utils::RessourceIndex RessourceVector<T>::create()
         id = _freeSpaces.front();
         _freeSpaces.erase(_freeSpaces.begin());
         _isLoaded[id] = true;
+        _data[id].reset(new T);
     }
 
     return id;
@@ -91,16 +92,16 @@ void RessourceVector<T>::remove(dm::utils::RessourceIndex i)
 {
     if(i >= size()) return;
 
-    _data[i] = T();
+    _data[i].reset();
     _freeSpaces.emplace_back(i);
     _isLoaded[i] = false;
 }
 
 template<typename T>
-dm::utils::RessourceIndex RessourceVector<T>::add(const T& t)
+dm::utils::RessourceIndex RessourceVector<T>::add(const std::shared_ptr<T>& ptr)
 {
     RessourceIndex i = create();
-    get(i) = t;
+    _data[i] = ptr;
     return i;
 }
 
